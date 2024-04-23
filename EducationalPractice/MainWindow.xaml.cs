@@ -13,6 +13,7 @@ using ZXing.Common;
 using ZXing.QrCode;
 using System.Drawing;
 using ZXing.Windows.Compatibility;
+using Microsoft.Win32;
 
 
 namespace EducationalPractice
@@ -27,17 +28,60 @@ namespace EducationalPractice
 
         private void TButt_Click(object sender, RoutedEventArgs e)
         {
-            string tStr = "test string to QR-Code";
+            string tStr = "test string;741416 to QR-Code";
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
-
-            BitMatrix matrix = qrCodeWriter.encode(tStr, BarcodeFormat.QR_CODE, 300, 300);
+            Dictionary<EncodeHintType, object> hints = new Dictionary<EncodeHintType, object>
+            {
+                { EncodeHintType.ERROR_CORRECTION, "Q" }
+            };
+            BitMatrix matrix = qrCodeWriter.encode(tStr, BarcodeFormat.QR_CODE, 300, 300, hints);
 
             BarcodeWriter barcode = new BarcodeWriter();
             Bitmap bitmap = barcode.Write(matrix);
+            SaveFileDialog fileDialog = new SaveFileDialog
+            {
+                Title = "Выберите путь для сохранения",
+                OverwritePrompt = true,
+                Filter = "PNG-изображение|*.png",
+                DefaultExt = ".png",
+                
+            };
+            string filename = "";
+            if(fileDialog.ShowDialog() == true)
+            {
+                filename = fileDialog.FileName;
+                bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            else
+            {
+                MessageBox.Show("Файл не сохранен", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
 
-            bitmap.Save("QR.png", System.Drawing.Imaging.ImageFormat.Png);
+            
+        }
+        private void LoButt_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog
+            {
+                Title = "Выберите путь для сохранения",
+                Filter = "PNG-изображение|*.png",
+                
+                DefaultExt = ".png"
+            };
+            string filename = "";
+            if (fileDialog.ShowDialog() == true)
+            {
+                filename = fileDialog.FileName;
+                img.Source = BitmapFrame.Create(new Uri(filename));
+            }
+            else
+            {
+                MessageBox.Show("Файл не загружен", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
 
-            img.Source = new BitmapImage(new Uri("bin\\Debug\\net8.0-windows\\QR.png", UriKind.Relative));
+
+            
         }
     }
 }

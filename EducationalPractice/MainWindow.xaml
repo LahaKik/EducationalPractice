@@ -9,11 +9,28 @@
     <Grid x:Name="GridCont">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
+            <!--<ColumnDefinition Width="0.5*"></ColumnDefinition>-->
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" ShowsPreview="True" Width="3"></GridSplitter>
-        <Button x:Name="TButt" Content="Test image" Click="TButt_Click" Grid.Column="0"></Button>
-        <Image x:Name="img" Grid.Column="2" Source="bin\Debug\net8.0-windows\QR.png"></Image>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" ShowsPreview="True" Width="3"/>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.15*"/>
+                <RowDefinition Height="*"/>
+
+            </Grid.RowDefinitions>
+            <Button x:Name="CrButt" Content="Create image" Click="TButt_Click" Grid.Column="0"/>
+            <Button x:Name="LoButt" Content="Load image" Click="LoButt_Click" Grid.Column="2"/>
+
+        </Grid>
+            
+        <Image x:Name="img" Grid.Column="2" Source="/QR.png" Height="300" Width="300"/>
     </Grid>
 </Window>
