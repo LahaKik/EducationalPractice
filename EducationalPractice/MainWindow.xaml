@@ -6,7 +6,14 @@
         xmlns:local="clr-namespace:EducationalPractice"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+    <Grid x:Name="GridCont">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" ShowsPreview="True" Width="3"></GridSplitter>
+        <Button x:Name="TButt" Content="Test image" Click="TButt_Click" Grid.Column="0"></Button>
+        <Image x:Name="img" Grid.Column="2" Source="bin\Debug\net8.0-windows\QR.png"></Image>
     </Grid>
 </Window>
