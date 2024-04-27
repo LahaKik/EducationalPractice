@@ -4,16 +4,33 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EducationalPractice"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="900" Width="1600">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="#FF9150BF" BorderThickness="2" BorderBrush="#FF9609EA" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <BitmapImage x:Key="DefaultImageSource" UriSource="/Resources/DefaultImage.png"/>
+
+    </Window.Resources>
+
     <Grid x:Name="GridCont">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <!--<ColumnDefinition Width="0.5*"></ColumnDefinition>-->
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.8*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" ShowsPreview="True" Width="3"/>
+        
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -22,15 +39,39 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.15*"/>
+                <RowDefinition Height="0.10*"/>
                 <RowDefinition Height="*"/>
 
             </Grid.RowDefinitions>
             <Button x:Name="CrButt" Content="Create image" Click="TButt_Click" Grid.Column="0"/>
-            <Button x:Name="LoButt" Content="Load image" Click="LoButt_Click" Grid.Column="2"/>
+            <Button x:Name="LoButt" Content="Load image" Click="LoButt_Click" Grid.Column="2" Foreground="White"/>
 
         </Grid>
+        <DataGrid x:Name="ListOfNotes" Grid.Column="1"  AlternatingRowBackground="LightGray" Background="White" AutoGenerateColumns="False" 
+          ScrollViewer.HorizontalScrollBarVisibility="Auto" Foreground="Black" IsReadOnly="True" 
+          OpacityMask="Black" RowBackground="White" ItemsSource="{Binding}" SelectionMode="Single" MouseDoubleClick="CreateQR_DCLK">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add" Click="Add_CLK"/>
+                    <MenuItem Header="Edit" Click="Edit_CLK"/>
+                    <MenuItem Command="Delete" Header="Delete"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№" Binding="{Binding Path=Id}"/>
+                <DataGridTextColumn Header="ФИО Заявителя" Binding="{Binding Path=NameClient}"/>
+                <DataGridTextColumn Header="ФИО Руководителя" Binding="{Binding Path=NameDirector}"/>
+                <DataGridTextColumn Header="Адрес" Binding="{Binding Path=Address}"/>
+                <DataGridTextColumn Header="Тематика" Binding="{Binding Path=Theme}"/>
+                <DataGridTextColumn Header="Содержание" Binding="{Binding Path=Content}"/>
+                <DataGridTextColumn Header="Резолюция" Binding="{Binding Path=Resolution}"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Path=Status}"/>
+                <DataGridTextColumn Header="Примечание" Binding="{Binding Path=Note}"/>
+            </DataGrid.Columns>
             
-        <Image x:Name="img" Grid.Column="2" Source="/QR.png" Height="300" Width="300"/>
+        </DataGrid>
+
+        <Image x:Name="img" Grid.Column="2" Height="300" Width="300"/>
     </Grid>
 </Window>
