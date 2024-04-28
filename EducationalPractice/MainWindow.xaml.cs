@@ -58,25 +58,7 @@ namespace EducationalPractice
         {
             string tStr = "test string;741416 to QR-Code";
             Bitmap bitmap = CreateQRBitmap(tStr);
-            SaveFileDialog fileDialog = new SaveFileDialog
-            {
-                Title = "Выберите путь для сохранения",
-                OverwritePrompt = true,
-                Filter = "PNG-изображение|*.png",
-                DefaultExt = ".png",
-                
-            };
             
-            string filename = "";
-            if(fileDialog.ShowDialog() == true)
-            {
-                filename = fileDialog.FileName;
-                bitmap.Save(filename, System.Drawing.Imaging.ImageFormat.Png);
-            }
-            else
-            {
-                MessageBox.Show("Файл не сохранен", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
         }
         private void LoButt_Click(object sender, RoutedEventArgs e)
         {
@@ -157,6 +139,29 @@ namespace EducationalPractice
                 bmp.CacheOption = BitmapCacheOption.OnLoad;
                 bmp.EndInit();
                 img.Source = bmp;
+            }
+        }
+
+        private void SaveButt_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog
+            {
+                Title = "Выберите путь для сохранения",
+                OverwritePrompt = true,
+                Filter = "PNG-изображение|*.png",
+                DefaultExt = ".png",
+
+            };
+
+            string filename = "";
+            if (fileDialog.ShowDialog() == true)
+            {
+                filename = fileDialog.FileName;
+                //File.Copy()
+            }
+            else
+            {
+                MessageBox.Show("Файл не сохранен", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }
