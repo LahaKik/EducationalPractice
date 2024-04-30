@@ -16,7 +16,7 @@ namespace EducationalPractice
     public class User
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [Required]
         public required string NameClient { get; set; }
         [Required]
@@ -30,6 +30,18 @@ namespace EducationalPractice
         public string? Note { get; set; }
         [NotMapped]
         public string? QRPath { get; set; }
+        public void CopyValues(User user)
+        {
+            NameClient = user.NameClient;
+            NameDirector = user.NameDirector;
+            Address = user.Address;
+            Theme = user.Theme;
+            Content = user.Content;
+            Resolution = user.Resolution;
+            Status = user.Status;
+            Note = user.Note;
+            QRPath = null;
+        }
     }
 
     public class UsersDB : DbContext

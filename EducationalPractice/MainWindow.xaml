@@ -19,18 +19,22 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <BitmapImage x:Key="DefaultImageSource" UriSource="/Resources/DefaultImage.png"/>
-
     </Window.Resources>
-
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="Add_CLK"/>
+        <CommandBinding Command="Replace" Executed="Edit_CLK"/>
+        <!--<CommandBinding Command="Delete" Executed="Del_CLK"/>-->
+    </Window.CommandBindings>
+    
     <Grid x:Name="GridCont">
         <Grid.ColumnDefinitions>
             <!--<ColumnDefinition Width="0.5*"></ColumnDefinition>-->
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.8*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        
+        <Grid.Effect>
+            <BlurEffect x:Name="BlurForGrid" Radius="0"/>
+        </Grid.Effect>
 
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -45,15 +49,15 @@
             <Button x:Name="SaveButt" Content="Save QR" Click="SaveButt_Click" Grid.Column="0" Grid.Row="1"/>
             <Button x:Name="LoButt" Content="Load image" Click="LoButt_Click" Grid.Column="2" Grid.Row="1" Foreground="White"/>
             <Image x:Name="img" Grid.ColumnSpan="3" Height="300" Width="300"/>
-
         </Grid>
+        
         <DataGrid x:Name="ListOfNotes" Grid.Column="0"  AlternatingRowBackground="LightGray" Background="White" AutoGenerateColumns="False" 
-          ScrollViewer.HorizontalScrollBarVisibility="Auto" Foreground="Black" IsReadOnly="True" 
+          ScrollViewer.HorizontalScrollBarVisibility="Auto" Foreground="Black" IsReadOnly="True"
           OpacityMask="Black" RowBackground="White" ItemsSource="{Binding}" SelectionMode="Single" MouseDoubleClick="CreateQR_DCLK">
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add" Click="Add_CLK"/>
-                    <MenuItem Header="Edit" Click="Edit_CLK"/>
+                    <MenuItem Command="New" Header="Add"/>
+                    <MenuItem Command="Replace" Header="Edit"/>
                     <MenuItem Command="Delete" Header="Delete"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
@@ -71,6 +75,7 @@
             </DataGrid.Columns>
             
         </DataGrid>
+
 
     </Grid>
 </Window>
