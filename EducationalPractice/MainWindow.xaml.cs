@@ -1,25 +1,12 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ZXing;
-using ZXing.Common;
-using ZXing.QrCode;
 using System.Drawing;
-using ZXing.Windows.Compatibility;
 using Microsoft.Win32;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.IO;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using System;
-
 
 namespace EducationalPractice
 {
@@ -35,15 +22,18 @@ namespace EducationalPractice
         }
 
         delegate void QRHandler(string path);
-        event QRHandler QRCreated;
+        event QRHandler QRCreated;        
+
 
         UsersDB db = new UsersDB();
+        User? UserQR;
         public MainWindow()
         {
             InitializeComponent();
             Directory.CreateDirectory(Environment.CurrentDirectory + "\\Cache");
             Loaded += MainWindow_Loaded;
             QRCreated += ApplyImage;
+            
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -54,12 +44,6 @@ namespace EducationalPractice
             
         }
 
-        private void TButt_Click(object sender, RoutedEventArgs e)
-        {
-            string tStr = "test string;741416 to QR-Code";
-            Bitmap bitmap = CreateQRBitmap(tStr);
-            
-        }
         private void LoButt_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog
@@ -83,12 +67,39 @@ namespace EducationalPractice
 
         private void Add_CLK(object sender, RoutedEventArgs e)
         {
-
+            EditingWindow window = new EditingWindow();
+            window.Owner = this;
+            window.EditUser += Add_User;
+            BlurForGrid.Radius = 10;
+            if (window.ShowDialog() != null)
+            {
+                BlurForGrid.Radius = 0;
+            }
         }
 
         private void Edit_CLK(object sender, RoutedEventArgs e)
         {
-
+            User? user = ListOfNotes.SelectedItem as User;
+            if (user != null)
+            {
+                EditingWindow window = new EditingWindow(user);
+                window.Owner = this;
+                window.EditUser += Edit_User;
+                BlurForGrid.Radius = 10;
+                if (window.ShowDialog() != null)
+                {
+                    BlurForGrid.Radius = 0;
+                }
+            }
+        }
+        private void Del_CLK(object sender, RoutedEventArgs e)
+        {
+            User? user = ListOfNotes.SelectedItem as User;
+            if(user != null)
+            {
+                db.Remove(user);
+                db.SaveChanges();
+            }
         }
 
         private void CreateQR_DCLK(object sender, MouseButtonEventArgs e)
@@ -102,7 +113,7 @@ namespace EducationalPractice
                     if(user.QRPath == null)
                     {
                         string UserString = JsonSerializer.Serialize<User>(user);
-                        Bitmap bitmap = CreateQRBitmap(UserString);
+                        Bitmap bitmap = QRCoder.CreateQRBitmap(UserString);
                         string path = Environment.CurrentDirectory + "\\Cache\\" + "QR" + NQRCashe.ToString() + ".png";
                         user.QRPath = path;
                         bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Png);
@@ -112,23 +123,12 @@ namespace EducationalPractice
                     {
                         QRCreated?.Invoke(user.QRPath);
                     }
+                    UserQR = user;
                 }
             }
         }
 
-        private static Bitmap CreateQRBitmap(string str)
-        {
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            Dictionary<EncodeHintType, object> hints = new Dictionary<EncodeHintType, object>
-            {
-                { EncodeHintType.ERROR_CORRECTION, "Q" }
-            };
-            BitMatrix matrix = qrCodeWriter.encode(str, BarcodeFormat.QR_CODE, 300, 300, hints);
 
-            BarcodeWriter barcode = new BarcodeWriter();
-            Bitmap bitmap = barcode.Write(matrix);
-            return bitmap;
-        }
         private void ApplyImage(string path)
         {
             using (var stream = File.OpenRead(path))
@@ -144,6 +144,9 @@ namespace EducationalPractice
 
         private void SaveButt_Click(object sender, RoutedEventArgs e)
         {
+            if (UserQR == null || UserQR.QRPath == null)
+                return;
+
             SaveFileDialog fileDialog = new SaveFileDialog
             {
                 Title = "Выберите путь для сохранения",
@@ -157,12 +160,37 @@ namespace EducationalPractice
             if (fileDialog.ShowDialog() == true)
             {
                 filename = fileDialog.FileName;
-                //File.Copy()
+                File.Copy(UserQR.QRPath, filename, true);
             }
             else
             {
                 MessageBox.Show("Файл не сохранен", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+        private void Add_User(User user)
+        {
+            db.Users.Add(user);
+            db.SaveChanges();
+            DataContext = db.Users.Local.ToObservableCollection();
+        }
+        private void Edit_User(User EdUser)
+        {
+            User? editedUser = db.Users.FirstOrDefault(u => u.Id == EdUser.Id);
+            editedUser?.CopyValues(EdUser);
+            db.SaveChanges();
+            DataContext = db.Users.Local.ToObservableCollection();
+            ListOfNotes.Items.Refresh();
+        }
+
+        //private void DelCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        //{
+        //    User? user = ListOfNotes.SelectedItem as User;
+        //    if (user != null)
+        //    {
+        //        e.CanExecute = true;
+        //    }
+        //    else
+        //        e.CanExecute = false;
+        //}
     }
 }
