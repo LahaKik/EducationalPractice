@@ -23,7 +23,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="New" Executed="Add_CLK"/>
         <CommandBinding Command="Replace" Executed="Edit_CLK"/>
-        <!--<CommandBinding Command="Delete" Executed="Del_CLK"/>-->
+        <CommandBinding Command="Delete" Executed="Del_CLK"/>
     </Window.CommandBindings>
     
     <Grid x:Name="GridCont">
@@ -53,12 +53,12 @@
         
         <DataGrid x:Name="ListOfNotes" Grid.Column="0"  AlternatingRowBackground="LightGray" Background="White" AutoGenerateColumns="False" 
           ScrollViewer.HorizontalScrollBarVisibility="Auto" Foreground="Black" IsReadOnly="True"
-          OpacityMask="Black" RowBackground="White" ItemsSource="{Binding}" SelectionMode="Single" MouseDoubleClick="CreateQR_DCLK">
+          OpacityMask="Black" RowBackground="White" ItemsSource="{Binding}" SelectionMode="Single" MouseDoubleClick="CreateQR_DCLK" IsSynchronizedWithCurrentItem="True">
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="New" Header="Add"/>
-                    <MenuItem Command="Replace" Header="Edit"/>
-                    <MenuItem Command="Delete" Header="Delete"/>
+                    <MenuItem Header="Add" Click="Add_CLK"/>
+                    <MenuItem Header="Edit" Click="Edit_CLK"/>
+                    <MenuItem Header="Delete" Click="Del_CLK"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
 

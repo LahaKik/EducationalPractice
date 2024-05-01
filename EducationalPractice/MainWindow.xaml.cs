@@ -69,6 +69,7 @@ namespace EducationalPractice
         {
             EditingWindow window = new EditingWindow();
             window.Owner = this;
+            window.Clip = this.VisualClip;
             window.EditUser += Add_User;
             BlurForGrid.Radius = 10;
             if (window.ShowDialog() != null)
@@ -93,12 +94,15 @@ namespace EducationalPractice
             }
         }
         private void Del_CLK(object sender, RoutedEventArgs e)
-        {
+        {        
             User? user = ListOfNotes.SelectedItem as User;
-            if(user != null)
+            if (user != null)
             {
                 db.Remove(user);
                 db.SaveChanges();
+                DataContext = db.Users.Local.ToObservableCollection();
+                ListOfNotes.Items.Refresh();
+                
             }
         }
 

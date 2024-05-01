@@ -38,7 +38,9 @@
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
         <Label Content="ФИО Клиента" Target="{Binding ElementName=NameClientTB}" Grid.Row="0" Grid.Column="0"/>
-        <TextBox x:Name="NameClientTB" Grid.Row="0" Grid.Column="1"/>
+        <TextBox x:Name="NameClientTB" Grid.Row="0" Grid.Column="1">
+
+        </TextBox>
 
         <Label Content="ФИО Руководителя" Target="{Binding ElementName=NameDirTB}" Grid.Row="1" Grid.Column="0"/>
         <TextBox x:Name="NameDirTB" Grid.Row="1" Grid.Column="1"/>
