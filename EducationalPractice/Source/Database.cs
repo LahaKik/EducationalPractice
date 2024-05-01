@@ -47,7 +47,7 @@ namespace EducationalPractice
     public class UsersDB : DbContext
     {
         public DbSet<User> Users { get; set; } = null!;
-
+        
         public UsersDB() : base() 
         {
             Database.EnsureCreated();
