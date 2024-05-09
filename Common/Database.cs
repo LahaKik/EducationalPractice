@@ -1,17 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Configuration;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 
-namespace EducationalPractice
+namespace Common
 {
     
     public class User
@@ -27,12 +18,12 @@ namespace EducationalPractice
         public string? Content { get; set; }
         public string? Resolution { get; set; }
         public Status Status { get; set; }
-        
         public string? Note { get; set; }
         [NotMapped]
         public string? QRPath { get; set; }
         public void CopyValues(User user)
         {
+            Id = user.Id;
             NameClient = user.NameClient;
             NameDirector = user.NameDirector;
             Address = user.Address;
@@ -64,16 +55,5 @@ namespace EducationalPractice
         Created,
         Reviewed,
         Rejected
-    }
-
-    public class StringValidator : ValidationRule
-    {
-        public override System.Windows.Controls.ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
-        {
-            if (string.IsNullOrWhiteSpace((string)value))
-                return new System.Windows.Controls.ValidationResult(false, "Поле не должно быть пустым.");
-            else
-                return System.Windows.Controls.ValidationResult.ValidResult;
-        }
     }
 }
