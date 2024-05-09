@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace EducationalPractice
 {
@@ -9,23 +11,28 @@ namespace EducationalPractice
     {
         public delegate void AddingHandler(User user);
         public event AddingHandler? EditUser;
-        int? Iduser;
+
+        private User User;
         public EditingWindow()
         {
             InitializeComponent();
+            User = new User
+            {
+                NameClient = null,
+                NameDirector = null
+            };
+            grid.DataContext = User;
         }
         public EditingWindow(User user)
         {
             InitializeComponent();
-
-            Iduser = user.Id;
-            NameClientTB.Text = user.NameClient;
-            NameDirTB.Text = user.NameDirector;
-            AddressTB.Text = user.Address;
-            ThemeTB.Text = user.Theme;
-            ContentTB.Text = user.Content;
-            ResolutionTB.Text = user.Resolution;
-            NoteTB.Text = user.Note;
+            User = new User
+            {
+                NameClient = null,
+                NameDirector = null
+            };
+            User.CopyValues(user);
+            grid.DataContext = User;
             OkButt.Content = "Изменить";
         }
 
@@ -33,19 +40,43 @@ namespace EducationalPractice
 
         private void AddOrEditButt(object sender, RoutedEventArgs e)
         {
-            EditUser?.Invoke(new User
+            bool Val = true;
+            foreach (var item in grid.Children)
             {
-                Id = Iduser ?? null,
-                NameClient = NameClientTB.Text,
-                NameDirector = NameDirTB.Text,
-                Address = AddressTB.Text,
-                Theme = ThemeTB.Text,
-                Content = ContentTB.Text,
-                Resolution = ResolutionTB.Text,
-                Note = NoteTB.Text,
-                Status = Status.Created
-            });
-            Close();
+                
+                if (item is TextBox tb)
+                {
+                    tb.AppendText(tb.Text);
+                    bool tVal = Validate(tb, null!);
+                    Val = Val ? tVal : Val;
+                }
+            }
+            if(Val)
+            {
+                EditUser?.Invoke(User);
+                Close();
+            }
+        }
+
+        private void Validate(object sender, TextChangedEventArgs e)
+        {
+            TextBox? tb = sender as TextBox;
+            if (tb != null)
+            {
+                if(string.IsNullOrEmpty(tb.Text))
+                {
+                    tb.BorderBrush = new SolidColorBrush { Color = Colors.Red };
+                    return false;
+                }
+                else
+                {
+                    tb.BorderBrush = new SolidColorBrush { Color = Colors.Gray };
+                    return true;
+                }
+            }
+            return false;
         }
     }
+
+
 }

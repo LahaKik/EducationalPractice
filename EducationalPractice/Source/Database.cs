@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace EducationalPractice
 {
@@ -18,9 +19,9 @@ namespace EducationalPractice
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? Id { get; set; }
         [Required]
-        public required string NameClient { get; set; }
+        public required string? NameClient { get; set; }
         [Required]
-        public required string NameDirector { get; set; }
+        public required string? NameDirector { get; set; }
         public string? Address { get; set; }
         public string? Theme { get; set; }
         public string? Content { get; set; }
@@ -63,5 +64,16 @@ namespace EducationalPractice
         Created,
         Reviewed,
         Rejected
+    }
+
+    public class StringValidator : ValidationRule
+    {
+        public override System.Windows.Controls.ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            if (string.IsNullOrWhiteSpace((string)value))
+                return new System.Windows.Controls.ValidationResult(false, "Поле не должно быть пустым.");
+            else
+                return System.Windows.Controls.ValidationResult.ValidResult;
+        }
     }
 }

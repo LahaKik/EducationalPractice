@@ -137,12 +137,12 @@ namespace EducationalPractice
         {
             using (var stream = File.OpenRead(path))
             {
-                var bmp = new BitmapImage();
-                bmp.BeginInit();
-                bmp.StreamSource = stream;
-                bmp.CacheOption = BitmapCacheOption.OnLoad;
-                bmp.EndInit();
-                img.Source = bmp;
+                var bmi = new BitmapImage();
+                bmi.BeginInit();
+                bmi.StreamSource = stream;
+                bmi.CacheOption = BitmapCacheOption.OnLoad;
+                bmi.EndInit();
+                img.Source = bmi;
             }
         }
 
