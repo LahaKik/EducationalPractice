@@ -22,10 +22,13 @@
             <Setter Property="FontSize" Value="8"/>
         </Style>
     </Window.Resources>
-    <Grid>
+
+
+    <Grid x:Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width=".1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -34,34 +37,42 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-        <Label Content="ФИО Клиента" Target="{Binding ElementName=NameClientTB}" Grid.Row="0" Grid.Column="0"/>
-        <TextBox x:Name="NameClientTB" Grid.Row="0" Grid.Column="1">
+        <Grid.DataContext>
+            <local:User/>
+        </Grid.DataContext>
+        <Label Content="ФИО Клиента*" Target="{Binding ElementName=NameClientTB}" Grid.Row="0" Grid.Column="0"/>
+        <TextBox x:Name="NameClientTB" Grid.Row="0" Grid.Column="1" TextChanged="Validate" Text="{Binding NameClient, Mode=TwoWay}"/>
 
-        </TextBox>
-
-        <Label Content="ФИО Руководителя" Target="{Binding ElementName=NameDirTB}" Grid.Row="1" Grid.Column="0"/>
-        <TextBox x:Name="NameDirTB" Grid.Row="1" Grid.Column="1"/>
+        <Label Content="ФИО Руководителя*" Target="{Binding ElementName=NameDirTB}" Grid.Row="1" Grid.Column="0"/>
+        <TextBox x:Name="NameDirTB" Grid.Row="1" Grid.Column="1" TextChanged="Validate" Text="{Binding NameDirector, Mode=TwoWay}"/>
 
         <Label Content="Адрес" Target="{Binding ElementName=AddressTB}" Grid.Row="2" Grid.Column="0"/>
-        <TextBox x:Name="AddressTB" Grid.Row="2" Grid.Column="1"/>
+        <TextBox x:Name="AddressTB" Grid.Row="2" Grid.Column="1" Text="{Binding Address, Mode=TwoWay}"/>
 
-        <Label Content="Тема" Target="{Binding ElementName=ThemeTB}" Grid.Row="3" Grid.Column="0"/>
-        <TextBox x:Name="ThemeTB" Grid.Row="3" Grid.Column="1"/>
+        <Label Content="Тема*" Target="{Binding ElementName=ThemeTB}" Grid.Row="3" Grid.Column="0"/>
+        <TextBox x:Name="ThemeTB" Grid.Row="3" Grid.Column="1" TextChanged="Validate" Text="{Binding Theme, Mode=TwoWay}"/>
 
-        <Label Content="Содержание" Target="{Binding ElementName=ContentTB}" Grid.Row="4" Grid.Column="0"/>
-        <TextBox x:Name="ContentTB" Grid.Row="4" Grid.Column="1"/>
+        <Label Content="Содержание*" Target="{Binding ElementName=ContentTB}" Grid.Row="4" Grid.Column="0"/>
+        <TextBox x:Name="ContentTB" Grid.Row="4" Grid.Column="1" TextChanged="Validate" Text="{Binding Content, Mode=TwoWay}"/>
 
-        <Label Content="Резолюция" Target="{Binding ElementName=ResolutionTB}" Grid.Row="5" Grid.Column="0"/>
-        <TextBox x:Name="ResolutionTB" Grid.Row="5" Grid.Column="1"/>
+        <Label Content="Примечание" Target="{Binding ElementName=NoteTB}" Grid.Row="5" Grid.Column="0"/>
+        <TextBox x:Name="NoteTB" Grid.Row="5" Grid.Column="1" Text="{Binding Note, Mode=TwoWay}"/>
 
-        <Label Content="Примечание" Target="{Binding ElementName=NoteTB}" Grid.Row="6" Grid.Column="0"/>
-        <TextBox x:Name="NoteTB" Grid.Row="6" Grid.Column="1"/>
+        <Label Content="*обязательное поле" Grid.Row="6" Grid.Column="0" FontSize="9"/>
 
-        <Button x:Name="CancelButt" Click="CancelBut" IsCancel="True" Content="Отмена" Grid.Column="1" HorizontalAlignment="Left" Margin="483,53,0,0" Grid.Row="6" Width="40" Grid.RowSpan="2"/>
-        <Button x:Name="OkButt" Click="AddOrEditButt" IsDefault="True" Content="Добавить" Grid.Column="1" HorizontalAlignment="Left" Margin="414,53,0,0" Grid.Row="6" Width="44" Grid.RowSpan="2"/>
+        <Grid Grid.Row="6" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width=".2*"/>
+                <ColumnDefinition Width=".2*"/>
+                <ColumnDefinition Width=".2*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CancelButt" Click="CancelBut" IsCancel="True" Content="Отмена" Grid.Column="3" HorizontalAlignment="Stretch"/>
+            <Button x:Name="OkButt" Click="AddOrEditButt" IsDefault="True" Content="Добавить" Grid.Column="1"/>
+
+        </Grid>
 
     </Grid>
 </Window>
