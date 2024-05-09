@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using ZXing.Common;
 using ZXing.QrCode;
 using ZXing;
 using ZXing.Windows.Compatibility;
+using System.Text.Json;
+using System.Windows.Media.Imaging;
 
-namespace EducationalPractice
+namespace Common
 {
     public static class QRCoder
     {
@@ -26,6 +23,21 @@ namespace EducationalPractice
             BarcodeWriter barcode = new BarcodeWriter();
             Bitmap bitmap = barcode.Write(matrix);
             return bitmap;
+        }
+        public static User? ReadQR(string path)
+        {
+            BarcodeReader barcode = new BarcodeReader();
+            try
+            {            
+                Bitmap bitmap = new Bitmap(path);
+                Result result = barcode.Decode(bitmap);
+                if (result == null)
+                    return null;
+                string userJson = result.Text;
+                User? user = JsonSerializer.Deserialize<User>(userJson);
+                return user; 
+            }
+            catch { return null; }
         }
     }
 }

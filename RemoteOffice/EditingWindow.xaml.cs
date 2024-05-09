@@ -1,9 +1,9 @@
-﻿using Common;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Common;
 
-namespace ClientOffice
+namespace RemoteOffice
 {
     /// <summary>
     /// Логика взаимодействия для EditingWindow.xaml
@@ -41,23 +41,16 @@ namespace ClientOffice
 
         private void AddOrEditButt(object sender, RoutedEventArgs e)
         {
-            bool Val = true;
-            foreach (var item in grid.Children)
+            string txt = ResolutionTB.Text;
+            ResolutionTB.Text = "";
+            ResolutionTB.AppendText(txt);
+            bool val = ValidateOnExit(ResolutionTB);
+            if (User.Status == Status.Created)
             {
-
-                if (item is TextBox tb)
-                {
-                    string txt = tb.Text;
-                    tb.Text = "";
-                    tb.AppendText(txt);
-                    if (tb.Tag != null && tb.Tag.ToString() == "Required")
-                    {
-                        bool tVal = ValidateOnExit(tb);
-                        Val = Val ? tVal : Val;
-                    }
-                }
+                StatusLabel.Foreground = new SolidColorBrush { Color = Colors.Red };
+                return;
             }
-            if(Val)
+            if (val)
             {
                 ChangeInUser?.Invoke(User);
                 Close();
@@ -69,7 +62,7 @@ namespace ClientOffice
             TextBox? tb = sender as TextBox;
             if (tb != null)
             {
-                if(string.IsNullOrEmpty(tb.Text))
+                if (string.IsNullOrEmpty(tb.Text))
                 {
                     tb.BorderBrush = new SolidColorBrush { Color = Colors.Red };
                 }
@@ -98,7 +91,20 @@ namespace ClientOffice
             return false;
         }
         #endregion
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton? button = sender as RadioButton;
+            StatusLabel.Foreground = new SolidColorBrush { Color = Colors.Black };
+            if (button != null)
+            {
+                if (button.Content.ToString() == "Рассметрено")
+                    User.Status = Status.Reviewed;
+                else if (button.Content.ToString() == "Отклонено")
+                    User.Status = Status.Rejected;
+            }
+        }
     }
 
-
 }
+

@@ -1,20 +1,26 @@
-﻿using System.Windows;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Drawing;
+using System.IO;
+using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Drawing;
-using Microsoft.Win32;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using System.IO;
-using Common;
 
-namespace ClientOffice
+namespace RemoteOffice
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
+        delegate void QRHandler(string path);
+        event QRHandler QRCreated;
+
         private static int _nqrcashe = 1;
-        private static int NQRCashe 
+        private static int NQRCashe
         {
             get
             {
@@ -22,20 +28,17 @@ namespace ClientOffice
             }
         }
 
-        delegate void QRHandler(string path);
-        event QRHandler QRCreated;
-
-        string CachePath = Environment.CurrentDirectory + @"\Cache";
-
         UsersDB db = new UsersDB();
         User? UserQR;
+        string CachePath = Environment.CurrentDirectory + @"\Cache";
+
         public MainWindow()
         {
             InitializeComponent();
-            Directory.CreateDirectory(CachePath);
+            Directory.CreateDirectory(Environment.CurrentDirectory + @"\Cache");
             Loaded += MainWindow_Loaded;
             QRCreated += ApplyImage;
-            
+
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -43,7 +46,7 @@ namespace ClientOffice
             db.Database.EnsureCreated();
             db.Users.Load();
             DataContext = db.Users.Local.ToObservableCollection();
-            
+
         }
 
         private void LoButt_Click(object sender, RoutedEventArgs e)
@@ -52,7 +55,7 @@ namespace ClientOffice
             {
                 Title = "Выберите путь для сохранения",
                 Filter = "PNG-изображение|*.png",
-                
+
                 DefaultExt = ".png"
             };
             string filename = "";
@@ -60,10 +63,10 @@ namespace ClientOffice
             {
                 filename = fileDialog.FileName;
                 User? LoadUser = QRCoder.ReadQR(filename);
-                if(LoadUser != null )
+                if (LoadUser != null)
                 {
                     User? dbUser = db.Users.FirstOrDefault(user => user.Id == LoadUser.Id);
-                    if( dbUser != null )
+                    if (dbUser != null)
                     {
                         dbUser.CopyValues(LoadUser);
 
@@ -115,7 +118,7 @@ namespace ClientOffice
             }
         }
         private void Del_CLK(object sender, RoutedEventArgs e)
-        {        
+        {
             User? user = ListOfNotes.SelectedItem as User;
             if (user != null)
             {
@@ -123,19 +126,19 @@ namespace ClientOffice
                 db.SaveChanges();
                 DataContext = db.Users.Local.ToObservableCollection();
                 ListOfNotes.Items.Refresh();
-                
+
             }
         }
 
         private void CreateQR_DCLK(object sender, MouseButtonEventArgs e)
         {
             DataGrid? dataGrid = sender as DataGrid;
-            if(dataGrid != null)
+            if (dataGrid != null)
             {
                 User? user = dataGrid.SelectedItem as User;
-                if(user != null)
+                if (user != null)
                 {
-                    if(user.QRPath == null)
+                    if (user.QRPath == null)
                     {
                         string UserString = JsonSerializer.Serialize<User>(user);
                         Bitmap bitmap = QRCoder.CreateQRBitmap(UserString);
