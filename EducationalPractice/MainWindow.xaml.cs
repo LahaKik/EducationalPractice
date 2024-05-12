@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.IO;
 using Common;
+using System.Windows.Media.Animation;
 
 namespace ClientOffice
 {
@@ -74,6 +75,9 @@ namespace ClientOffice
                         dbUser = db.Users.FirstOrDefault(user => user.Id == LoadUser.Id);
                     }
                     UserQR = dbUser;
+                    LabelQR.Content = "QR код пользователя с Id:" + dbUser!.Id;
+                    if (SaveButt.IsEnabled == false)
+                        SaveButt.IsEnabled = true;
                     string newPath = CachePath + @"\" + "QR" + NQRCashe.ToString() + ".png";
                     File.Copy(filename, newPath);
                     dbUser!.QRPath = newPath;
@@ -149,6 +153,9 @@ namespace ClientOffice
                         QRCreated?.Invoke(user.QRPath);
                     }
                     UserQR = user;
+                    LabelQR.Content = "QR код пользователя с Id:" + user.Id;
+                    if (SaveButt.IsEnabled == false)
+                        SaveButt.IsEnabled = true;
                 }
             }
         }
@@ -174,7 +181,7 @@ namespace ClientOffice
             {
                 Title = "Выберите путь для сохранения",
                 OverwritePrompt = true,
-                Filter = "PNG-изображение|*.png",
+                Filter = "PNG-изображение|*.png|Документ PDF|*.pdf",
                 DefaultExt = ".png",
 
             };
@@ -183,7 +190,13 @@ namespace ClientOffice
             if (fileDialog.ShowDialog() == true)
             {
                 filename = fileDialog.FileName;
-                File.Copy(UserQR.QRPath, filename, true);
+                string ext = Path.GetExtension(filename);
+                if (ext == ".png")
+                    File.Copy(UserQR.QRPath, filename, true);
+                else if (ext == ".pdf")
+                    PDFWriter.GeneratePDF(filename, UserQR.QRPath, UserQR.ToStringArray());
+                else
+                    MessageBox.Show("Выберите расширение из списка", "Неправльный формат файла!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -211,6 +224,39 @@ namespace ClientOffice
             {
                 BlurForGrid.Radius = 0;
             }
+        }
+
+        private void StartAnimate(object sender, MouseEventArgs e)
+        {
+            DoubleAnimation buttonAnimWidth = new DoubleAnimation();
+            DoubleAnimation buttonAnimHeight = new DoubleAnimation();
+            buttonAnimHeight.From = HelpButton.ActualHeight;
+            buttonAnimWidth.From = HelpButton.ActualWidth;
+            buttonAnimHeight.To = 50;
+            buttonAnimWidth.To = 350;
+            buttonAnimHeight.Duration = TimeSpan.FromSeconds(0.5);
+            buttonAnimWidth.Duration = TimeSpan.FromSeconds(0.5);
+            HelpButton.Content =
+                "Двойной клик по строчке таблицы - создать QR код\n" +
+                "ПКМ по выбранной строчке - выбрать действие с заявлением";
+            HelpButton.BeginAnimation(HeightProperty, buttonAnimHeight);
+            HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
+        }
+
+        private void StopAnimate(object sender, MouseEventArgs e)
+        {
+
+            DoubleAnimation buttonAnimWidth = new DoubleAnimation();
+            DoubleAnimation buttonAnimHeight = new DoubleAnimation();
+            buttonAnimHeight.From = HelpButton.ActualHeight;
+            buttonAnimWidth.From = HelpButton.ActualWidth;
+            buttonAnimHeight.To = 20;
+            buttonAnimWidth.To = 20;
+            buttonAnimHeight.Duration = TimeSpan.FromSeconds(0.5);
+            buttonAnimWidth.Duration = TimeSpan.FromSeconds(0.5);
+            HelpButton.Content = "?";
+            HelpButton.BeginAnimation(HeightProperty, buttonAnimHeight);
+            HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
         }
     }
 }

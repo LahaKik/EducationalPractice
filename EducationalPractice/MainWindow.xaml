@@ -4,21 +4,51 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientOffice"
-        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib" xmlns:common="clr-namespace:Common"
         mc:Ignorable="d"
         Title="MainWindow" Height="900" Width="1600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="Button">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="#FF9150BF" BorderThickness="2" BorderBrush="#FF9609EA" CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Background="#FF9150BF" BorderThickness="2" BorderBrush="#FF9609EA" CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Background="Gray" BorderThickness="2" BorderBrush="DarkGray" CornerRadius="10">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
+        
+        <ControlTemplate x:Key="helpButTemplate" TargetType="Button">
+            <Border x:Name="TemplBorder" CornerRadius="15" Background="#FF8150BF" BorderThickness="0" BorderBrush="#FF9609EA">
+                <ContentPresenter x:Name="TemplCont" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter TargetName="TemplCont" Property="HorizontalAlignment" Value="Left"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="false">
+                    <Setter TargetName="TemplCont" Property="HorizontalAlignment" Value="Center"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <common:User x:Key="UserQR"/>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="New" Executed="Add_CLK"/>
@@ -36,24 +66,30 @@
             <BlurEffect x:Name="BlurForGrid" Radius="0"/>
         </Grid.Effect>
 
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1"><!--DataContext="{DynamicResource UserQR}">-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height=".1*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="0.10*"/>
             </Grid.RowDefinitions>
-            <Button x:Name="SaveButt" Content="Save QR" Click="SaveButt_Click" Grid.Column="0" Grid.Row="1"/>
-            <Button x:Name="LoButt" Content="Load image" Click="LoButt_Click" Grid.Column="2" Grid.Row="1" Foreground="White"/>
-            <Image x:Name="img" Grid.ColumnSpan="3" Height="300" Width="300"/>
+            <Button x:Name="SaveButt" Content="Сохранить QR код для отправки, печати" Click="SaveButt_Click" Grid.Column="0" Grid.Row="3" IsEnabled="False"/>
+            <Button x:Name="LoButt" Content="Загрузить изображение из другого офиса" Click="LoButt_Click" Grid.Column="2" Grid.Row="3" Foreground="White"/>
+            <Image x:Name="img" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" Height="300" Width="300"/>
+            <Label x:Name="LabelQR" Content="" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" FontSize="15"/> <!--  <-Do smth with it binding  -->
         </Grid>
-        
+
+        <Button x:Name="HelpButton" Content="?" Template="{StaticResource helpButTemplate}" Panel.ZIndex="1" Foreground="White" Height="25" Width="25"  MouseEnter="StartAnimate" MouseLeave="StopAnimate" Cursor="Help" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+
+
         <DataGrid x:Name="ListOfNotes" Grid.Column="0"  AlternatingRowBackground="LightGray" Background="White" AutoGenerateColumns="False" 
           ScrollViewer.HorizontalScrollBarVisibility="Auto" Foreground="Black" IsReadOnly="True"
-          OpacityMask="Black" RowBackground="White" ItemsSource="{Binding}" SelectionMode="Single" MouseDoubleClick="CreateQR_DCLK" IsSynchronizedWithCurrentItem="True">
+          OpacityMask="Black" RowBackground="White" ItemsSource="{Binding}" SelectionMode="Single" MouseDoubleClick="CreateQR_DCLK">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add" Click="Add_CLK"/>
@@ -75,7 +111,7 @@
             </DataGrid.Columns>
             
         </DataGrid>
-
+        
 
     </Grid>
 </Window>

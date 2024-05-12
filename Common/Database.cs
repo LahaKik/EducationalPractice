@@ -34,6 +34,34 @@ namespace Common
             Note = user.Note;
             QRPath = null;
         }
+        public override string ToString()
+        {
+            string ret = string.Empty;
+            ret += "Id:" + Id + "\n";
+            ret += "ФИО Заявителя:" + NameClient + "\n";
+            ret += "ФИО Руководителя:" + NameDirector + "\n";
+            ret += "Адресс:" + Address + "\n";
+            ret += "Тематика:" + Theme + "\n";
+            ret += "Содержание:" + Content + "\n";
+            ret += "Резолюция:" + Resolution + "\n";
+            ret += "Статус:" + Status + "\n";
+            ret += "Примечание:" + Note + "\n";
+            return ret;
+        }
+        public string[] ToStringArray()
+        {
+            string[] ret = new string[9];
+            ret[0] = "Id:" + Id;
+            ret[1] = "ФИО Заявителя:" + NameClient;
+            ret[2] = "ФИО Руководителя:" + NameDirector;
+            ret[3] = "Адресс:" + Address;    
+            ret[4] = "Тематика:" + Theme;
+            ret[5] = "Содержание:" + Content;
+            ret[6] = "Резолюция:" + Resolution;
+            ret[7] = "Статус:" + Status;
+            ret[8] = "Примечание:" + Note;
+            return ret;
+        }
     }
 
     public class UsersDB : DbContext
@@ -54,6 +82,6 @@ namespace Common
     {
         Created,
         Reviewed,
-        Rejected
+        Rejected,
     }
 }

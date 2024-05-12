@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace RemoteOffice
@@ -77,6 +78,9 @@ namespace RemoteOffice
                         dbUser = db.Users.FirstOrDefault(user => user.Id == LoadUser.Id);
                     }
                     UserQR = dbUser;
+                    LabelQR.Content = "QR код пользователя с Id:" + dbUser!.Id;
+                    if (SaveButt.IsEnabled == false)
+                        SaveButt.IsEnabled = true;
                     string newPath = CachePath + @"\" + "QR" + NQRCashe.ToString() + ".png";
                     File.Copy(filename, newPath);
                     dbUser!.QRPath = newPath;
@@ -152,6 +156,9 @@ namespace RemoteOffice
                         QRCreated?.Invoke(user.QRPath);
                     }
                     UserQR = user;
+                    LabelQR.Content = "QR код пользователя с Id:" + user!.Id;
+                    if (SaveButt.IsEnabled == false)
+                        SaveButt.IsEnabled = true;
                 }
             }
         }
@@ -177,7 +184,7 @@ namespace RemoteOffice
             {
                 Title = "Выберите путь для сохранения",
                 OverwritePrompt = true,
-                Filter = "PNG-изображение|*.png",
+                Filter = "PNG-изображение|*.png|Документ PDF|*.pdf",
                 DefaultExt = ".png",
 
             };
@@ -186,7 +193,13 @@ namespace RemoteOffice
             if (fileDialog.ShowDialog() == true)
             {
                 filename = fileDialog.FileName;
-                File.Copy(UserQR.QRPath, filename, true);
+                string ext = Path.GetExtension(filename);
+                if (ext == ".png")
+                    File.Copy(UserQR.QRPath, filename, true);
+                else if (ext == ".pdf")
+                    PDFWriter.GeneratePDF(filename, UserQR.QRPath, UserQR.ToStringArray());
+                else
+                    MessageBox.Show("Выберите расширение из списка", "Неправльный формат файла!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -214,6 +227,37 @@ namespace RemoteOffice
             {
                 BlurForGrid.Radius = 0;
             }
+        }
+
+        private void StartAnimate(object sender, MouseEventArgs e)
+        {
+            DoubleAnimation buttonAnimWidth = new DoubleAnimation();
+            DoubleAnimation buttonAnimHeight = new DoubleAnimation();
+            buttonAnimHeight.From = HelpButton.ActualHeight;
+            buttonAnimWidth.From = HelpButton.ActualWidth;
+            buttonAnimHeight.To = 200;
+            buttonAnimWidth.To = 200;
+            buttonAnimHeight.Duration = TimeSpan.FromSeconds(0.5);
+            buttonAnimWidth.Duration = TimeSpan.FromSeconds(0.5);
+            HelpButton.Content = "Чтобы что?";
+            HelpButton.BeginAnimation(HeightProperty, buttonAnimHeight);
+            HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
+        }
+
+        private void StopAnimate(object sender, MouseEventArgs e)
+        {
+
+            DoubleAnimation buttonAnimWidth = new DoubleAnimation();
+            DoubleAnimation buttonAnimHeight = new DoubleAnimation();
+            buttonAnimHeight.From = HelpButton.ActualHeight;
+            buttonAnimWidth.From = HelpButton.ActualWidth;
+            buttonAnimHeight.To = 20;
+            buttonAnimWidth.To = 20;
+            buttonAnimHeight.Duration = TimeSpan.FromSeconds(0.5);
+            buttonAnimWidth.Duration = TimeSpan.FromSeconds(0.5);
+            HelpButton.Content = "?";
+            HelpButton.BeginAnimation(HeightProperty, buttonAnimHeight);
+            HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
         }
     }
 }

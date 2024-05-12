@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Database.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PDFWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QRCoder.cs" />
   </ItemGroup>
 </Project>

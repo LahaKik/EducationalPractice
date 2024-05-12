@@ -4,7 +4,6 @@ using ZXing.QrCode;
 using ZXing;
 using ZXing.Windows.Compatibility;
 using System.Text.Json;
-using System.Windows.Media.Imaging;
 
 namespace Common
 {
@@ -16,7 +15,6 @@ namespace Common
             Dictionary<EncodeHintType, object> hints = new Dictionary<EncodeHintType, object>
             {
                 { EncodeHintType.ERROR_CORRECTION, "Q" },
-                //{EncodeHintType.DISABLE_ECI, true }
             };
             BitMatrix matrix = qrCodeWriter.encode(str, BarcodeFormat.QR_CODE, 300, 300, hints);
 
