@@ -1,6 +1,7 @@
 ﻿using Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Text.Json;
@@ -212,13 +213,15 @@ namespace RemoteOffice
             db.SaveChanges();
             DataContext = db.Users.Local.ToObservableCollection();
         }
-        private void Edit_User(User EdUser)
+        private async void Edit_User(User EdUser)
         {
-            User? editedUser = db.Users.FirstOrDefault(u => u.Id == EdUser.Id);
-            editedUser?.CopyValues(EdUser);
-            db.SaveChanges();
-            DataContext = db.Users.Local.ToObservableCollection();
-            ListOfNotes.Items.Refresh();
+            if(DataContext is ObservableCollection<User> obsCollDC)
+            {
+                User? editedUser = obsCollDC.FirstOrDefault(u => u.Id == EdUser.Id);
+                editedUser?.CopyValues(EdUser);
+                ListOfNotes.Items.Refresh();
+                await db.SaveChangesAsync();
+            }
         }
         private void Blur(EditingWindow window)
         {
@@ -235,11 +238,13 @@ namespace RemoteOffice
             DoubleAnimation buttonAnimHeight = new DoubleAnimation();
             buttonAnimHeight.From = HelpButton.ActualHeight;
             buttonAnimWidth.From = HelpButton.ActualWidth;
-            buttonAnimHeight.To = 200;
-            buttonAnimWidth.To = 200;
+            buttonAnimHeight.To = 50;
+            buttonAnimWidth.To = 350;
             buttonAnimHeight.Duration = TimeSpan.FromSeconds(0.5);
             buttonAnimWidth.Duration = TimeSpan.FromSeconds(0.5);
-            HelpButton.Content = "Чтобы что?";
+            HelpButton.Content =
+                "Двойной клик по строчке таблицы - создать QR код\n" +
+                "ПКМ по выбранной строчке - выбрать действие с заявлением";
             HelpButton.BeginAnimation(HeightProperty, buttonAnimHeight);
             HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
         }
@@ -258,6 +263,22 @@ namespace RemoteOffice
             HelpButton.Content = "?";
             HelpButton.BeginAnimation(HeightProperty, buttonAnimHeight);
             HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
+        }
+
+        private void DropButt_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Данное действие удалит все данные в локальной базе данных!", "Внимание", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK
+                    && MessageBox.Show("Вы точно уверены?", "Внимание!", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            {
+
+            }
+            else return;
+
+            if (DataContext is ObservableCollection<User> obsCollDC)
+            {
+                obsCollDC.Clear();
+            }
+            db.SaveChanges();
         }
     }
 }

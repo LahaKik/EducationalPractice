@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.IO;
 using Common;
 using System.Windows.Media.Animation;
+using System.Collections.ObjectModel;
 
 namespace ClientOffice
 {
@@ -209,13 +210,15 @@ namespace ClientOffice
             db.SaveChanges();
             DataContext = db.Users.Local.ToObservableCollection();
         }
-        private void Edit_User(User EdUser)
+        private async void Edit_User(User EdUser)
         {
-            User? editedUser = db.Users.FirstOrDefault(u => u.Id == EdUser.Id);
-            editedUser?.CopyValues(EdUser);
-            db.SaveChanges();
-            DataContext = db.Users.Local.ToObservableCollection();
-            ListOfNotes.Items.Refresh();
+            if (DataContext is ObservableCollection<User> obsCollDC)
+            {
+                User? editedUser = obsCollDC.FirstOrDefault(u => u.Id == EdUser.Id);
+                editedUser?.CopyValues(EdUser);
+                ListOfNotes.Items.Refresh();
+                await db.SaveChangesAsync();
+            }
         }
         private void Blur(EditingWindow window)
         {
@@ -257,6 +260,21 @@ namespace ClientOffice
             HelpButton.Content = "?";
             HelpButton.BeginAnimation(HeightProperty, buttonAnimHeight);
             HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
+        }
+        private void DropButt_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Данное действие удалит все данные в локальной базе данных!", "Внимание", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK
+                    && MessageBox.Show("Вы точно уверены?", "Внимание!", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            {
+
+            }
+            else return;
+
+            if (DataContext is ObservableCollection<User> obsCollDC)
+            {
+                obsCollDC.Clear();
+            }
+            db.SaveChanges();
         }
     }
 }

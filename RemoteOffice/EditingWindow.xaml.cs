@@ -98,7 +98,7 @@ namespace RemoteOffice
             StatusLabel.Foreground = new SolidColorBrush { Color = Colors.Black };
             if (button != null)
             {
-                if (button.Content.ToString() == "Рассметрено")
+                if (button.Content.ToString() == "Рассмотрено")
                     User.Status = Status.Reviewed;
                 else if (button.Content.ToString() == "Отклонено")
                     User.Status = Status.Rejected;

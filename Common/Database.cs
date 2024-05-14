@@ -50,16 +50,18 @@ namespace Common
         }
         public string[] ToStringArray()
         {
-            string[] ret = new string[9];
-            ret[0] = "Id:" + Id;
-            ret[1] = "ФИО Заявителя:" + NameClient;
-            ret[2] = "ФИО Руководителя:" + NameDirector;
-            ret[3] = "Адресс:" + Address;    
-            ret[4] = "Тематика:" + Theme;
-            ret[5] = "Содержание:" + Content;
-            ret[6] = "Резолюция:" + Resolution;
-            ret[7] = "Статус:" + Status;
-            ret[8] = "Примечание:" + Note;
+            string[] ret =
+            [
+                "Id:" + Id,
+                "ФИО Заявителя:" + NameClient,
+                "ФИО Руководителя:" + NameDirector,
+                "Адресс:" + Address,
+                "Тематика:" + Theme,
+                "Содержание:" + Content,
+                "Резолюция:" + Resolution,
+                "Статус:" + Status,
+                "Примечание:" + Note,
+            ];
             return ret;
         }
     }

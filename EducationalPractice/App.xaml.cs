@@ -11,7 +11,7 @@ namespace ClientOffice
     /// </summary>
     public partial class App : Application
     {
-        private void CleanCashe(object sender, ExitEventArgs e)
+        private void CleanCaсhe(object sender, EventArgs e)
         {
             int tryDelete = 0;
             while (tryDelete < 100)
