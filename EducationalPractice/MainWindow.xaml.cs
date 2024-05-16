@@ -37,6 +37,7 @@ namespace ClientOffice
             Directory.CreateDirectory(CachePath);
             Loaded += MainWindow_Loaded;
             QRCreated += ApplyImage;
+            
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -45,7 +46,6 @@ namespace ClientOffice
             db.Users.Load();
             DataContext = db.Users.Local.ToObservableCollection();
         }
-
         private async void LoButt_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog
@@ -63,7 +63,6 @@ namespace ClientOffice
                 User? LoadUser = QRCoder.ReadQR(filename);
                 if(LoadUser != null )
                 {
-
                     User? dbUser = obsCollDC.FirstOrDefault(user => user.Id == LoadUser.Id);
                     if( dbUser != null )
                     {

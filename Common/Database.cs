@@ -84,6 +84,6 @@ namespace Common
     {
         Created,
         Reviewed,
-        Rejected,
+        Rejected
     }
 }

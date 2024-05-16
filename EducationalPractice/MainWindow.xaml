@@ -110,8 +110,6 @@
                 <DataGridTextColumn Header="Примечание" Binding="{Binding Path=Note}"/>
             </DataGrid.Columns>
             
-        </DataGrid>
-        
-
+      </DataGrid>
     </Grid>
 </Window>

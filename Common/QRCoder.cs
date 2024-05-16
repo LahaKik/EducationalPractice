@@ -14,7 +14,7 @@ namespace Common
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             Dictionary<EncodeHintType, object> hints = new Dictionary<EncodeHintType, object>
             {
-                { EncodeHintType.ERROR_CORRECTION, "Q" },
+                { EncodeHintType.ERROR_CORRECTION, "Q" }
             };
             BitMatrix matrix = qrCodeWriter.encode(str, BarcodeFormat.QR_CODE, 300, 300, hints);
 

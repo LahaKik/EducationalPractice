@@ -129,6 +129,7 @@ namespace RemoteOffice
                 Blur(window);
             }
         }
+
         private async void Del_CLK(object sender, RoutedEventArgs e)
         {
             User? user = ListOfNotes.SelectedItem as User;
