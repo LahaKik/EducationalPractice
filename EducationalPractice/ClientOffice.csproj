@@ -10,7 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Arrow.png" />
     <None Remove="DefaultImage.png" />
+    <None Remove="Resources\Arrow.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Arrow.png" />
+    <Resource Include="Resources\Arrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\DefaultImage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

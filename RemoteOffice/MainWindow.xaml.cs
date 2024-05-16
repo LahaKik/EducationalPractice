@@ -37,10 +37,9 @@ namespace RemoteOffice
         public MainWindow()
         {
             InitializeComponent();
-            Directory.CreateDirectory(Environment.CurrentDirectory + @"\Cache");
+            Directory.CreateDirectory(CachePath);
             Loaded += MainWindow_Loaded;
             QRCreated += ApplyImage;
-
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -48,10 +47,9 @@ namespace RemoteOffice
             db.Database.EnsureCreated();
             db.Users.Load();
             DataContext = db.Users.Local.ToObservableCollection();
-
         }
 
-        private void LoButt_Click(object sender, RoutedEventArgs e)
+        private async void LoButt_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog
             {
@@ -61,43 +59,52 @@ namespace RemoteOffice
                 DefaultExt = ".png"
             };
             string filename = "";
-            if (fileDialog.ShowDialog() == true)
+            if (fileDialog.ShowDialog() == true
+                && DataContext is ObservableCollection<User> obsCollDC)
             {
                 filename = fileDialog.FileName;
                 User? LoadUser = QRCoder.ReadQR(filename);
                 if (LoadUser != null)
                 {
-                    User? dbUser = db.Users.FirstOrDefault(user => user.Id == LoadUser.Id);
+                    User? dbUser = obsCollDC.FirstOrDefault(user => user.Id == LoadUser.Id);
                     if (dbUser != null)
                     {
-                        dbUser.CopyValues(LoadUser);
-
+                        ConfirmationWindow confWindow = new ConfirmationWindow(dbUser, LoadUser);
+                        confWindow.Owner = this;
+                        confWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                        BlurForGrid.Radius = 10;
+                        if(confWindow.ShowDialog() == true)
+                        {
+                            BlurForGrid.Radius = 0;
+                            dbUser.CopyValues(LoadUser);
+                        }
+                        else
+                        {
+                            BlurForGrid.Radius = 0;
+                            return;
+                        }
                     }
                     else
                     {
                         Add_User(LoadUser);
-                        dbUser = db.Users.FirstOrDefault(user => user.Id == LoadUser.Id);
+                        dbUser = obsCollDC.FirstOrDefault(user => user.Id == LoadUser.Id);
                     }
                     UserQR = dbUser;
                     LabelQR.Content = "QR код пользователя с Id:" + dbUser!.Id;
                     if (SaveButt.IsEnabled == false)
                         SaveButt.IsEnabled = true;
-                    string newPath = CachePath + @"\" + "QR" + NQRCashe.ToString() + ".png";
+
+                    string newPath = CachePath + @$"\QR{NQRCashe}.png";
                     File.Copy(filename, newPath);
                     dbUser!.QRPath = newPath;
                     ApplyImage(newPath);
-                    db.SaveChanges();
-                    DataContext = db.Users.Local.ToObservableCollection();
                     ListOfNotes.Items.Refresh();
+                    await db.SaveChangesAsync();
                 }
                 else
                 {
                     MessageBox.Show("Файл не содержит QR-кода или поврежден", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-            else
-            {
-                MessageBox.Show("Файл не загружен", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -122,16 +129,15 @@ namespace RemoteOffice
                 Blur(window);
             }
         }
-        private void Del_CLK(object sender, RoutedEventArgs e)
+        private async void Del_CLK(object sender, RoutedEventArgs e)
         {
             User? user = ListOfNotes.SelectedItem as User;
-            if (user != null)
+            if (user != null
+                && DataContext is ObservableCollection<User> obsCollDC)
             {
-                db.Remove(user);
-                db.SaveChanges();
-                DataContext = db.Users.Local.ToObservableCollection();
+                obsCollDC.Remove(user);
                 ListOfNotes.Items.Refresh();
-
+                await db.SaveChangesAsync();
             }
         }
 
@@ -147,7 +153,7 @@ namespace RemoteOffice
                     {
                         string UserString = JsonSerializer.Serialize<User>(user);
                         Bitmap bitmap = QRCoder.CreateQRBitmap(UserString);
-                        string path = CachePath + @"\" + "QR" + NQRCashe.ToString() + ".png";
+                        string path = CachePath + @$"\QR{NQRCashe}.png";
                         user.QRPath = path;
                         bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Png);
                         QRCreated?.Invoke(path);
@@ -187,13 +193,11 @@ namespace RemoteOffice
                 OverwritePrompt = true,
                 Filter = "PNG-изображение|*.png|Документ PDF|*.pdf",
                 DefaultExt = ".png",
-
             };
 
-            string filename = "";
             if (fileDialog.ShowDialog() == true)
             {
-                filename = fileDialog.FileName;
+                string filename = fileDialog.FileName;
                 string ext = Path.GetExtension(filename);
                 if (ext == ".png")
                     File.Copy(UserQR.QRPath, filename, true);
@@ -207,11 +211,13 @@ namespace RemoteOffice
                 MessageBox.Show("Файл не сохранен", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-        private void Add_User(User user)
+        private async void Add_User(User user)
         {
-            db.Users.Add(user);
-            db.SaveChanges();
-            DataContext = db.Users.Local.ToObservableCollection();
+            if (DataContext is ObservableCollection<User> obsCollDC)
+            {
+                obsCollDC.Add(user);
+                await db.SaveChangesAsync();
+            }
         }
         private async void Edit_User(User EdUser)
         {
@@ -265,20 +271,19 @@ namespace RemoteOffice
             HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
         }
 
-        private void DropButt_Click(object sender, RoutedEventArgs e)
+        private async void DropButt_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Данное действие удалит все данные в локальной базе данных!", "Внимание", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK
-                    && MessageBox.Show("Вы точно уверены?", "Внимание!", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
-            {
-
-            }
-            else return;
+            if (MessageBox.Show("Данное действие удалит все данные в локальной базе данных!", "Внимание", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK
+                    || MessageBox.Show("Вы точно уверены?", "Внимание!", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+                return;
 
             if (DataContext is ObservableCollection<User> obsCollDC)
             {
                 obsCollDC.Clear();
             }
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
+
+        private void Save(object sender, System.ComponentModel.CancelEventArgs e) => db.SaveChanges();
     }
 }

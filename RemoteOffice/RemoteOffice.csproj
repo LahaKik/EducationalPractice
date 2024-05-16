@@ -11,9 +11,21 @@
   <Import Project="..\Common\Common.projitems" Label="Shared" />
 
   <ItemGroup>
+    <None Remove="Arrow.png" />
+    <None Remove="Resouces\Arrow.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
     <PackageReference Include="PDFsharp" Version="6.0.0" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Arrow.png" />
+    <Resource Include="Resouces\Arrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

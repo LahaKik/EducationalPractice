@@ -61,7 +61,7 @@
         <TextBox x:Name="ContentTB" Grid.Row="4" Grid.Column="1" Text="{Binding Content}" IsEnabled="False"/>
 
         <Label Content="Примечание" Target="{Binding ElementName=NoteTB}" Grid.Row="5" Grid.Column="0"/>
-        <TextBox x:Name="NoteTB" Grid.Row="5" Grid.Column="1" Text="{Binding Note}" IsEnabled="False"/>
+        <TextBox x:Name="NoteTB" Grid.Row="5" Grid.Column="1" Text="{Binding Note}"/>
 
         <Label Content="Резолюция" FontWeight="Bold" Target="{Binding ElementName=ResolutionTB}" Grid.Row="6" Grid.Column="0"/>
         <TextBox x:Name="ResolutionTB" Grid.Row="6" Grid.Column="1" Text="{Binding Resolution, Mode=TwoWay}"/>

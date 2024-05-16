@@ -67,7 +67,20 @@ namespace ClientOffice
                     User? dbUser = obsCollDC.FirstOrDefault(user => user.Id == LoadUser.Id);
                     if( dbUser != null )
                     {
-                        dbUser.CopyValues(LoadUser);
+                        ConfirmationWindow confWindow = new ConfirmationWindow(dbUser, LoadUser);
+                        confWindow.Owner = this;
+                        confWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                        BlurForGrid.Radius = 10;
+                        if (confWindow.ShowDialog() == true)
+                        {
+                            BlurForGrid.Radius = 0;
+                            dbUser.CopyValues(LoadUser);
+                        }
+                        else
+                        {
+                            BlurForGrid.Radius = 0;
+                            return;
+                        }
                     }
                     else
                     {
@@ -138,7 +151,7 @@ namespace ClientOffice
                     {
                         string UserString = JsonSerializer.Serialize<User>(user);
                         Bitmap bitmap = QRCoder.CreateQRBitmap(UserString);
-                        string path = CachePath + @"\" + "QR" + NQRCashe.ToString() + ".png";
+                        string path = CachePath + @$"\QR{NQRCashe}.png";
                         user.QRPath = path;
                         bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Png);
                         QRCreated?.Invoke(path);
@@ -178,7 +191,6 @@ namespace ClientOffice
                 OverwritePrompt = true,
                 Filter = "PNG-изображение|*.png|Документ PDF|*.pdf",
                 DefaultExt = ".png",
-
             };
 
             if (fileDialog.ShowDialog() == true)
@@ -268,5 +280,7 @@ namespace ClientOffice
             }
             await db.SaveChangesAsync();
         }
+
+        private void Save(object sender, System.ComponentModel.CancelEventArgs e) => db.SaveChanges();
     }
 }

@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ClientOffice"
-        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib" xmlns:common="clr-namespace:Common"
+        xmlns:common="clr-namespace:Common"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900" Width="1600" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="900" Width="1600" WindowStartupLocation="CenterScreen" Closing="Save">
     <Window.Resources>
         <Style TargetType="Button">
             <Style.Triggers>

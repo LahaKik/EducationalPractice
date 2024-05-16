@@ -1,10 +1,10 @@
 ﻿using Common;
 using System.Windows;
 
-namespace ClientOffice
+namespace RemoteOffice
 {
     /// <summary>
-    /// Логика взаимодействия для Window1.xaml
+    /// Логика взаимодействия для ConfirmationWindow.xaml
     /// </summary>
     public partial class ConfirmationWindow : Window
     {

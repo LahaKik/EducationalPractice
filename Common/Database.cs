@@ -40,7 +40,7 @@ namespace Common
             ret += "Id:" + Id + "\n";
             ret += "ФИО Заявителя:" + NameClient + "\n";
             ret += "ФИО Руководителя:" + NameDirector + "\n";
-            ret += "Адресс:" + Address + "\n";
+            ret += "Адрес:" + Address + "\n";
             ret += "Тематика:" + Theme + "\n";
             ret += "Содержание:" + Content + "\n";
             ret += "Резолюция:" + Resolution + "\n";
