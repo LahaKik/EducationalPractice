@@ -1,22 +1,28 @@
-﻿using System.Windows;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Collections.ObjectModel;
+using System.Drawing;
+using System.IO;
+using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Drawing;
-using Microsoft.Win32;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using System.IO;
-using Common;
 using System.Windows.Media.Animation;
-using System.Collections.ObjectModel;
+using System.Windows.Media.Imaging;
 
-namespace ClientOffice
+namespace RemoteOffice
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
+        delegate void QRHandler(string path);
+        event QRHandler QRCreated;
+
         private static int _nqrcashe = 1;
-        private static int NQRCashe 
+        private static int NQRCashe
         {
             get
             {
@@ -24,20 +30,16 @@ namespace ClientOffice
             }
         }
 
-        delegate void QRHandler(string path);
-        event QRHandler QRCreated;
-
-        string CachePath = Environment.CurrentDirectory + @"\Cache";
-
         UsersDB db = new UsersDB();
         User? UserQR;
+        string CachePath = Environment.CurrentDirectory + @"\Cache";
+
         public MainWindow()
         {
             InitializeComponent();
             Directory.CreateDirectory(CachePath);
             Loaded += MainWindow_Loaded;
             QRCreated += ApplyImage;
-            
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -46,31 +48,32 @@ namespace ClientOffice
             db.Users.Load();
             DataContext = db.Users.Local.ToObservableCollection();
         }
+
         private async void LoButt_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog
             {
                 Title = "Выберите путь для сохранения",
                 Filter = "PNG-изображение|*.png",
-                
+
                 DefaultExt = ".png"
             };
             string filename = "";
-            if (fileDialog.ShowDialog() == true 
+            if (fileDialog.ShowDialog() == true
                 && DataContext is ObservableCollection<User> obsCollDC)
             {
                 filename = fileDialog.FileName;
                 User? LoadUser = QRCoder.ReadQR(filename);
-                if(LoadUser != null )
+                if (LoadUser != null)
                 {
                     User? dbUser = obsCollDC.FirstOrDefault(user => user.Id == LoadUser.Id);
-                    if( dbUser != null )
+                    if (dbUser != null)
                     {
                         ConfirmationWindow confWindow = new ConfirmationWindow(dbUser, LoadUser);
                         confWindow.Owner = this;
                         confWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                         BlurForGrid.Radius = 10;
-                        if (confWindow.ShowDialog() == true)
+                        if(confWindow.ShowDialog() == true)
                         {
                             BlurForGrid.Radius = 0;
                             dbUser.CopyValues(LoadUser);
@@ -126,8 +129,9 @@ namespace ClientOffice
                 Blur(window);
             }
         }
+
         private async void Del_CLK(object sender, RoutedEventArgs e)
-        {        
+        {
             User? user = ListOfNotes.SelectedItem as User;
             if (user != null
                 && DataContext is ObservableCollection<User> obsCollDC)
@@ -141,12 +145,12 @@ namespace ClientOffice
         private void CreateQR_DCLK(object sender, MouseButtonEventArgs e)
         {
             DataGrid? dataGrid = sender as DataGrid;
-            if(dataGrid != null)
+            if (dataGrid != null)
             {
                 User? user = dataGrid.SelectedItem as User;
-                if(user != null)
+                if (user != null)
                 {
-                    if(user.QRPath == null)
+                    if (user.QRPath == null)
                     {
                         string UserString = JsonSerializer.Serialize<User>(user);
                         Bitmap bitmap = QRCoder.CreateQRBitmap(UserString);
@@ -160,7 +164,7 @@ namespace ClientOffice
                         QRCreated?.Invoke(user.QRPath);
                     }
                     UserQR = user;
-                    LabelQR.Content = "QR код пользователя с Id:" + user.Id;
+                    LabelQR.Content = "QR код пользователя с Id:" + user!.Id;
                     if (SaveButt.IsEnabled == false)
                         SaveButt.IsEnabled = true;
                 }
@@ -210,7 +214,7 @@ namespace ClientOffice
         }
         private async void Add_User(User user)
         {
-            if(DataContext is ObservableCollection<User> obsCollDC)
+            if (DataContext is ObservableCollection<User> obsCollDC)
             {
                 obsCollDC.Add(user);
                 await db.SaveChangesAsync();
@@ -218,7 +222,7 @@ namespace ClientOffice
         }
         private async void Edit_User(User EdUser)
         {
-            if (DataContext is ObservableCollection<User> obsCollDC)
+            if(DataContext is ObservableCollection<User> obsCollDC)
             {
                 User? editedUser = obsCollDC.FirstOrDefault(u => u.Id == EdUser.Id);
                 editedUser?.CopyValues(EdUser);
@@ -226,7 +230,7 @@ namespace ClientOffice
                 await db.SaveChangesAsync();
             }
         }
-        private void Blur(Window window)
+        private void Blur(EditingWindow window)
         {
             BlurForGrid.Radius = 10;
             if (window.ShowDialog() != null)
@@ -267,6 +271,7 @@ namespace ClientOffice
             HelpButton.BeginAnimation(HeightProperty, buttonAnimHeight);
             HelpButton.BeginAnimation(WidthProperty, buttonAnimWidth);
         }
+
         private async void DropButt_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Данное действие удалит все данные в локальной базе данных!", "Внимание", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK

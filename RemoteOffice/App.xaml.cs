@@ -2,9 +2,8 @@
 using System.Data;
 using System.IO;
 using System.Windows;
-using Common;
 
-namespace ClientOffice
+namespace RemoteOffice
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -29,4 +28,5 @@ namespace ClientOffice
             }
         }
     }
+
 }
