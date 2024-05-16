@@ -41,15 +41,12 @@ namespace ClientOffice
 
         private void AddOrEditButt(object sender, RoutedEventArgs e)
         {
+            OkButt.Focus();
             bool Val = true;
             foreach (var item in grid.Children)
             {
-
                 if (item is TextBox tb)
                 {
-                    string txt = tb.Text;
-                    tb.Text = "";
-                    tb.AppendText(txt);
                     if (tb.Tag != null && tb.Tag.ToString() == "Required")
                     {
                         bool tVal = ValidateOnExit(tb);
