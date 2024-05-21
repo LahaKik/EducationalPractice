@@ -21,8 +21,10 @@ namespace ClientOffice
                     Directory.Delete(Environment.CurrentDirectory + "\\Cache", true);
                     break;
                 }
-                catch
+                catch(Exception ex)
                 {
+                    if (ex is DirectoryNotFoundException)
+                        break;
                     tryDelete++;
                     Thread.Sleep(100);
                 }

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientOffice", "EducationalPractice\ClientOffice.csproj", "{00F041CE-7A7E-4BEF-B817-186BBFD0483F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteOffice", "RemoteOffice\RemoteOffice.csproj", "{432FF803-29B9-41E9-B881-39AC1ABFC797}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common", "Common\Common.shproj", "{97EA5CB5-9FD9-4F19-806A-DC0ED4905055}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientOffice", "ClientOffice\ClientOffice.csproj", "{56620628-3B64-4D37-81AA-04662E928639}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,14 +15,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{00F041CE-7A7E-4BEF-B817-186BBFD0483F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00F041CE-7A7E-4BEF-B817-186BBFD0483F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00F041CE-7A7E-4BEF-B817-186BBFD0483F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00F041CE-7A7E-4BEF-B817-186BBFD0483F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{432FF803-29B9-41E9-B881-39AC1ABFC797}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{432FF803-29B9-41E9-B881-39AC1ABFC797}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{432FF803-29B9-41E9-B881-39AC1ABFC797}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{432FF803-29B9-41E9-B881-39AC1ABFC797}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56620628-3B64-4D37-81AA-04662E928639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56620628-3B64-4D37-81AA-04662E928639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56620628-3B64-4D37-81AA-04662E928639}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56620628-3B64-4D37-81AA-04662E928639}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -31,8 +31,8 @@ Global
 		SolutionGuid = {A24EAA69-5AFF-46B1-AEEA-66FD4B6F260B}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Common\Common.projitems*{00f041ce-7a7e-4bef-b817-186bbfd0483f}*SharedItemsImports = 5
 		Common\Common.projitems*{432ff803-29b9-41e9-b881-39ac1abfc797}*SharedItemsImports = 5
+		Common\Common.projitems*{56620628-3b64-4d37-81aa-04662e928639}*SharedItemsImports = 5
 		Common\Common.projitems*{97ea5cb5-9fd9-4f19-806a-dc0ed4905055}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
