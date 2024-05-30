@@ -24,13 +24,13 @@ namespace ClientOffice
             }
         }
 
-        delegate void QRHandler(string path);
-        event QRHandler QRCreated;
+        private delegate void QRHandler(string path);
+        private event QRHandler QRCreated;
 
-        string CachePath = Environment.CurrentDirectory + @"\Cache";
+        private readonly string CachePath = Environment.CurrentDirectory + @"\Cache";
 
-        UsersDB db = new UsersDB();
-        User? UserQR;
+        private UsersDB db = new UsersDB();
+        private User? UserQR;
         public MainWindow()
         {
             InitializeComponent();
@@ -86,15 +86,6 @@ namespace ClientOffice
                         Add_User(LoadUser);
                         dbUser = obsCollDC.FirstOrDefault(user => user.Id == LoadUser.Id);
                     }
-                    UserQR = dbUser;
-                    LabelQR.Content = "QR код пользователя с Id:" + dbUser!.Id;
-                    if (SaveButt.IsEnabled == false)
-                        SaveButt.IsEnabled = true;
-
-                    string newPath = CachePath + @$"\QR{NQRCashe}.png";
-                    File.Copy(filename, newPath);
-                    dbUser!.QRPath = newPath;
-                    ApplyImage(newPath);
                     ListOfNotes.Items.Refresh();
                     await db.SaveChangesAsync();
                 }
@@ -242,7 +233,7 @@ namespace ClientOffice
             buttonAnimHeight.From = HelpButton.ActualHeight;
             buttonAnimWidth.From = HelpButton.ActualWidth;
             buttonAnimHeight.To = 50;
-            buttonAnimWidth.To = 350;
+            buttonAnimWidth.To = 360;
             buttonAnimHeight.Duration = TimeSpan.FromSeconds(0.5);
             buttonAnimWidth.Duration = TimeSpan.FromSeconds(0.5);
             HelpButton.Content =

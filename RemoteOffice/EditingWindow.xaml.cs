@@ -56,22 +56,7 @@ namespace RemoteOffice
                 Close();
             }
         }
-        #region //Do smth with it 
-        private void Validate(object sender, TextChangedEventArgs e)
-        {
-            TextBox? tb = sender as TextBox;
-            if (tb != null)
-            {
-                if (string.IsNullOrEmpty(tb.Text))
-                {
-                    tb.BorderBrush = new SolidColorBrush { Color = Colors.Red };
-                }
-                else
-                {
-                    tb.BorderBrush = new SolidColorBrush { Color = Colors.Gray };
-                }
-            }
-        }
+
         private bool ValidateOnExit(object sender)
         {
             TextBox? tb = sender as TextBox;
@@ -90,7 +75,6 @@ namespace RemoteOffice
             }
             return false;
         }
-        #endregion
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {

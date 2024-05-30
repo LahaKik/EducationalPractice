@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Common
 {
@@ -20,6 +21,7 @@ namespace Common
         public Status Status { get; set; }
         public string? Note { get; set; }
         [NotMapped]
+        [JsonIgnore]
         public string? QRPath { get; set; }
         public void CopyValues(User user)
         {

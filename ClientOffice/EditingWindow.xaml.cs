@@ -60,13 +60,12 @@ namespace ClientOffice
                 Close();
             }
         }
-        #region //Do smth with it 
-        private void Validate(object sender, TextChangedEventArgs e)
+        private void Validate(object sender, EventArgs e)
         {
             TextBox? tb = sender as TextBox;
             if (tb != null)
             {
-                if(string.IsNullOrEmpty(tb.Text))
+                if (string.IsNullOrEmpty(tb.Text))
                 {
                     tb.BorderBrush = new SolidColorBrush { Color = Colors.Red };
                 }
@@ -94,7 +93,6 @@ namespace ClientOffice
             }
             return false;
         }
-        #endregion
     }
 
 

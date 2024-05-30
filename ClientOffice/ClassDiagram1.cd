@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="ClientOffice.MainWindow">
+    <Position X="8.75" Y="3.75" Width="4.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="ClientOffice.MainWindow.QRHandler">
+        <TypeIdentifier>
+          <NewMemberFileName>MainWindow.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <AssociationLine Name="db" Type="Common.UsersDB" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.75" Y="9.746" />
+        <Point X="7.25" Y="9.746" />
+        <Point X="7.25" Y="6.5" />
+        <Point X="3.375" Y="6.5" />
+        <Point X="3.375" Y="5.925" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAgKEBAAASAAgAEAAAAAAAAQAIAAAMACBAIAAABFg=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="db" />
+      <Field Name="UserQR" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="System.Windows.Window" Collapsed="true">
+    <Position X="8.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ClientOffice.EditingWindow">
+    <Position X="13.75" Y="5.5" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="ClientOffice.EditingWindow.AddingHandler">
+        <TypeIdentifier>
+          <NewMemberFileName>EditingWindow.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <AssociationLine Name="User" Type="Common.User" ManuallyRouted="true">
+      <Path>
+        <Point X="13.75" Y="7.467" />
+        <Point X="13.302" Y="7.467" />
+        <Point X="13.302" Y="11.476" />
+        <Point X="5.75" Y="11.476" />
+        <Point X="5.75" Y="10.228" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAACAAAAAEAAAAAAACAAACAAAAAAAAAAAgAA=</HashCode>
+      <FileName>EditingWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="User" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ClientOffice.ConfirmationWindow">
+    <Position X="13.5" Y="2.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>ConfirmationWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Common.QRCoder">
+    <Position X="10.75" Y="1" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>C:\Users\Laha\source\repos\EducationalPractice\Common\QRCoder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Common.PDFWriter">
+    <Position X="13.75" Y="1" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Laha\source\repos\EducationalPractice\Common\PDFWriter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Common.UsersDB">
+    <Position X="1.25" Y="4.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\Laha\source\repos\EducationalPractice\Common\Database.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Users" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Common.User">
+    <Position X="4.5" Y="6.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAgACAAAUEAAAAAAAAAAoAAACQAAAAAEgAAA=</HashCode>
+      <FileName>C:\Users\Laha\source\repos\EducationalPractice\Common\Database.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Status" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ClientOffice.App">
+    <Position X="4" Y="3" Width="3.25" />
+    <InheritanceLine Type="System.Windows.Application" FixedToPoint="true">
+      <Path>
+        <Point X="5.75" Y="2.191" />
+        <Point X="5.75" Y="3" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.EntityFrameworkCore.DbContext" Collapsed="true">
+    <Position X="2" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Microsoft.EntityFrameworkCore.DbSet&lt;TEntity&gt;" Collapsed="true">
+    <Position X="6.5" Y="5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Windows.Application" Collapsed="true">
+    <Position X="5" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Enum Name="Common.Status">
+    <Position X="1.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAAQAAAAAAAEAAAA=</HashCode>
+      <FileName>C:\Users\Laha\source\repos\EducationalPractice\Common\Database.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

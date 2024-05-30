@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteOffice" xmlns:common="clr-namespace:Common"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900" Width="1600" WindowStartupLocation="CenterScreen" Closing="Save">
+        Title="Удаленный офис" 
+        Height="900" Width="1600" 
+        WindowStartupLocation="CenterScreen" 
+        Closing="Save">
     <Window.Resources>
         <Style TargetType="Button">
             <Style.Triggers>
@@ -36,7 +39,7 @@
 
         <ControlTemplate x:Key="helpButTemplate" TargetType="Button">
             <Border x:Name="TemplBorder" CornerRadius="15" Background="#FF8150BF" BorderThickness="0" BorderBrush="#FF9609EA">
-                <ContentPresenter x:Name="TemplCont" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ContentPresenter x:Name="TemplCont" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4"/>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
@@ -49,15 +52,9 @@
         </ControlTemplate>
         <common:User x:Key="UserQR"/>
     </Window.Resources>
-    <Window.CommandBindings>
-        <CommandBinding Command="New" Executed="Add_CLK"/>
-        <CommandBinding Command="Replace" Executed="Edit_CLK"/>
-        <CommandBinding Command="Delete" Executed="Del_CLK"/>
-    </Window.CommandBindings>
 
     <Grid x:Name="GridCont">
         <Grid.ColumnDefinitions>
-            <!--<ColumnDefinition Width="0.5*"></ColumnDefinition>-->
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="0.8*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
@@ -66,7 +63,6 @@
         </Grid.Effect>
 
         <Grid Grid.Column="1">
-            <!--DataContext="{DynamicResource UserQR}">-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -83,14 +79,13 @@
             <Button x:Name="LoButt" Content="Загрузить изображение из другого офиса" Click="LoButt_Click" Grid.Column="2" Grid.Row="3" Foreground="White"/>
             <Image x:Name="img" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" Height="300" Width="300"/>
             <Label x:Name="LabelQR" Content="" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" FontSize="15"/>
-            <!--  <-Do smth with it binding  -->
         </Grid>
 
         <Button x:Name="HelpButton" Content="?" Template="{StaticResource helpButTemplate}" Panel.ZIndex="1" Foreground="White" Height="25" Width="25"  MouseEnter="StartAnimate" MouseLeave="StopAnimate" Cursor="Help" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
 
         <DataGrid x:Name="ListOfNotes" Grid.Column="0"  AlternatingRowBackground="LightGray" Background="White" AutoGenerateColumns="False" 
         ScrollViewer.HorizontalScrollBarVisibility="Auto" Foreground="Black" IsReadOnly="True"
-        OpacityMask="Black" RowBackground="White" ItemsSource="{Binding}" SelectionMode="Single" MouseDoubleClick="CreateQR_DCLK" IsSynchronizedWithCurrentItem="True" RowDetailsVisibilityMode="Visible">
+        OpacityMask="Black" RowBackground="White" ItemsSource="{Binding}" SelectionMode="Single" MouseDoubleClick="CreateQR_DCLK">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Загрузить" Click="LoButt_Click"/>

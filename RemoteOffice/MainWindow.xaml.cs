@@ -1,4 +1,4 @@
-﻿using Common;
+﻿  using Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
@@ -18,8 +18,8 @@ namespace RemoteOffice
     /// </summary>
     public partial class MainWindow : Window
     {
-        delegate void QRHandler(string path);
-        event QRHandler QRCreated;
+        private delegate void QRHandler(string path);
+        private event QRHandler QRCreated;
 
         private static int _nqrcashe = 1;
         private static int NQRCashe
@@ -30,9 +30,9 @@ namespace RemoteOffice
             }
         }
 
-        UsersDB db = new UsersDB();
-        User? UserQR;
-        string CachePath = Environment.CurrentDirectory + @"\Cache";
+        private UsersDB db = new UsersDB();
+        private User? UserQR;
+        private readonly string CachePath = Environment.CurrentDirectory + @"\Cache";
 
         public MainWindow()
         {
@@ -87,17 +87,7 @@ namespace RemoteOffice
                     else
                     {
                         Add_User(LoadUser);
-                        dbUser = obsCollDC.FirstOrDefault(user => user.Id == LoadUser.Id);
                     }
-                    UserQR = dbUser;
-                    LabelQR.Content = "QR код пользователя с Id:" + dbUser!.Id;
-                    if (SaveButt.IsEnabled == false)
-                        SaveButt.IsEnabled = true;
-
-                    string newPath = CachePath + @$"\QR{NQRCashe}.png";
-                    File.Copy(filename, newPath);
-                    dbUser!.QRPath = newPath;
-                    ApplyImage(newPath);
                     ListOfNotes.Items.Refresh();
                     await db.SaveChangesAsync();
                 }
@@ -106,15 +96,6 @@ namespace RemoteOffice
                     MessageBox.Show("Файл не содержит QR-кода или поврежден", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-        }
-
-        private void Add_CLK(object sender, RoutedEventArgs e)
-        {
-            EditingWindow window = new EditingWindow();
-            window.Owner = this;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.ChangeInUser += Add_User;
-            Blur(window);
         }
 
         private void Edit_CLK(object sender, RoutedEventArgs e)
@@ -246,7 +227,7 @@ namespace RemoteOffice
             buttonAnimHeight.From = HelpButton.ActualHeight;
             buttonAnimWidth.From = HelpButton.ActualWidth;
             buttonAnimHeight.To = 50;
-            buttonAnimWidth.To = 350;
+            buttonAnimWidth.To = 360;
             buttonAnimHeight.Duration = TimeSpan.FromSeconds(0.5);
             buttonAnimWidth.Duration = TimeSpan.FromSeconds(0.5);
             HelpButton.Content =
